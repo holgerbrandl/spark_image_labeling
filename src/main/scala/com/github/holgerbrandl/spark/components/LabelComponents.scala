@@ -39,7 +39,7 @@ object LabelComponents extends App {
     0, 0, 0, 0, 0
   ), 5, 5)
 
-  val graphData = new EdgedByCursor(img)
+  val graphData = new EdgesByCursor(img)
 
 
   // fixme hashcode with proper uid here

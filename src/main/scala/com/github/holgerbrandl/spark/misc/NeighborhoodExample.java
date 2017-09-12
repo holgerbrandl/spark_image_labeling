@@ -1,4 +1,4 @@
-package com.github.holgerbrandl.spark.components;
+package com.github.holgerbrandl.spark.misc;
 
 
 import net.imglib2.RandomAccess;

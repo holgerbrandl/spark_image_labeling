@@ -15,14 +15,14 @@ import java.util.List;
 /**
  * @author Holger Brandl
  */
-public class EdgedByCursor {
+public class EdgesByCursor {
 
 
     List<Pair<int[], int[]>> edges = new ArrayList<>();
     List<int[]> nodes = new ArrayList<>();
 
 
-    public EdgedByCursor(ArrayImg<IntType, IntArray> img) {
+    public EdgesByCursor(ArrayImg<IntType, IntArray> img) {
 
 //        https://imagej.net/ImgLib2_-_Accessors#A_RealRandomAccess_to_Render_Mandelbrot_Fractals
         ArrayLocalizingCursor<IntType> locCursor = img.localizingCursor();
@@ -75,7 +75,7 @@ public class EdgedByCursor {
                 5, 5);
 
 
-        EdgedByCursor graph = new EdgedByCursor(img);
+        EdgesByCursor graph = new EdgesByCursor(img);
 
         System.out.println("num edges " + graph.edges.size());
 
