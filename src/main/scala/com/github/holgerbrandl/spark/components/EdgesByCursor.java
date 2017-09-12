@@ -1,11 +1,14 @@
 package com.github.holgerbrandl.spark.components;
 
 import javafx.util.Pair;
+import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
+import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.img.array.ArrayLocalizingCursor;
 import net.imglib2.img.basictypeaccess.array.IntArray;
+import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.type.numeric.integer.IntType;
 
 import java.util.ArrayList;
@@ -22,10 +25,10 @@ public class EdgesByCursor {
     List<int[]> nodes = new ArrayList<>();
 
 
-    public EdgesByCursor(ArrayImg<IntType, IntArray> img) {
+    public EdgesByCursor(Img<IntType> img) {
 
 //        https://imagej.net/ImgLib2_-_Accessors#A_RealRandomAccess_to_Render_Mandelbrot_Fractals
-        ArrayLocalizingCursor<IntType> locCursor = img.localizingCursor();
+        Cursor locCursor = img.localizingCursor();
         final RandomAccess<IntType> r = img.randomAccess();
 
         int[] pos = new int[locCursor.numDimensions()];
@@ -37,7 +40,8 @@ public class EdgesByCursor {
             locCursor.localize(pos);
             locCursor.localize(centerPos);
 
-            if (locCursor.get().get() == 0) { // or use whatever cutoff here
+//            if (locCursor.get().get() == 0) { // or use whatever cutoff here
+            if (isForeground(locCursor.get())) { // or use whatever cutoff here
                 continue;
             }
 
@@ -51,7 +55,7 @@ public class EdgesByCursor {
                 r.setPosition(pos);
 
 
-                if (r.get().get() > 0) {
+                if (isForeground(r.get())) {
                     // found a new edge in the connectivity graph
                     edges.add(new Pair<>(Arrays.copyOf(pos, pos.length), centerClone));
                 }
@@ -60,6 +64,11 @@ public class EdgesByCursor {
 
             }
         }
+    }
+
+
+    private boolean isForeground(Object o) {
+        return o instanceof BitType ? ((BitType) o).get() : ((ByteType) o).get() > 0;
     }
 
 

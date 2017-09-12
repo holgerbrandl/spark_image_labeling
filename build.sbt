@@ -12,7 +12,6 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 )
 
-libraryDependencies += "net.imglib2" % "imglib2" % "4.3.0"
 
 
 // http://mvnrepository.com/artifact/net.imglib2/imglib2-ij/2.0.0-beta6
@@ -24,15 +23,17 @@ resolvers += "imglib resleases" at "http://maven.imagej.net/content/repositories
 //resolvers += "Boundless OSS Snapshots" at "http://repo.boundlessgeo.com/main/"
 resolvers += "Boundless OSS Snapshots" at "https://artifacts.unidata.ucar.edu/content/groups/public/"
 
+libraryDependencies += "net.imglib2" % "imglib2" % "4.3.0"
+
 libraryDependencies += "edu.ucar" % "udunits" % "4.3.18"
 
-libraryDependencies += "net.imglib2" % "imglib2-algorithm" % "0.8.1"
+libraryDependencies += "net.imglib2" % "imglib2-algorithm" % "0.8.1" // contains connected component impl
 
 //http://mvnrepository.com/artifact/net.imglib2/imglib2-ij/2.0.0-beta6
-libraryDependencies += "net.imglib2" % "imglib2-ij" % "2.0.0-beta6"
+libraryDependencies += "net.imglib2" % "imglib2-ij" % "2.0.0-beta-38"
 
 // not a compile but a runtime dependency to run ImageJFunctions.show(img)
-libraryDependencies += "net.imglib2" % "imglib2-meta" % "2.0.0-beta-26"
-libraryDependencies += "net.imglib2" % "imglib2-io" % "2.0.0-beta6"
+//libraryDependencies += "net.imglib2" % "imglib2-meta" % "2.0.0-beta-38"
+libraryDependencies += "net.imglib2" % "imglib2-io" % "2.0.0-beta-21"
 
 
