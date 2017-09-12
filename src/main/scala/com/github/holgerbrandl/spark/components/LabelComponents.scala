@@ -42,49 +42,38 @@ object LabelComponents extends App {
   val graphData = new EdgesByCursor(img)
 
 
-  // fixme hashcode with proper uid here
-  // see https://spark.apache.org/docs/latest/graphx-programming-guide.html
-  val vertRDD = sc.parallelize(JavaConversions.asScalaBuffer(graphData.nodes)).map(x =>
-    (getLongHash(x), x))
-
-  val edgesRDD: RDD[Edge[String]] = sc.parallelize(JavaConversions.asScalaBuffer(graphData.edges)).map(x =>
-    new Edge[String](getLongHash(x.getKey), getLongHash(x.getValue)))
-
-
   private def getLongHash(x: Array[Int]): Long = {
     // https://stackoverflow.com/questions/744735/java-array-hashcode-implementation
     //    x.hashCode().toLong
     java.util.Arrays.hashCode(x).toLong
   }
 
+  // fixme hashcode with proper uid here
+  // see https://spark.apache.org/docs/latest/graphx-programming-guide.html
+  val vertRDD = sc.parallelize(JavaConversions.asScalaBuffer(graphData.nodes))
+    .map(x => (getLongHash(x), x))
+
+  val edgesRDD: RDD[Edge[String]] = sc.parallelize(JavaConversions.asScalaBuffer(graphData.edges))
+    .map(x => new Edge[String](getLongHash(x.getKey), getLongHash(x.getValue)))
+
+
   val graph = Graph(vertRDD, edgesRDD)
 
   // Find the connected components
   val concomp = graph.connectedComponents()
-  val cc = concomp.vertices
-  concomp.vertices.collect()
-
 
   // join the graph with the nodes
   val labelGraph = vertRDD.join(concomp.vertices)
-  // labelGraph.take(1)
+
 
   //
   // create label image
   //
 
-
   private val dimension = Array.ofDim[Long](img.numDimensions())
   img.dimensions(dimension)
   val labelImage: Img[UnsignedByteType] = new ArrayImgFactory[UnsignedByteType]().create(dimension, new UnsignedByteType)
   val randAcc: RandomAccess[UnsignedByteType] = labelImage.randomAccess()
-
-  //  labelGraph.map(vertexData=>{
-  //    val imgCoord = vertexData._2._1
-  //    val color = vertexData._2._2.hashCode()
-  //
-  //    randAcc.setPosition(imgCoord)
-  //  })
 
   labelGraph
     .map { case (vertexId, (coord, color)) =>
@@ -96,5 +85,5 @@ object LabelComponents extends App {
   new FileSaver(ImageJFunctions.wrapUnsignedByte(img, "bar")).saveAsPng("test_image.png")
   new FileSaver(ImageJFunctions.wrapUnsignedByte(labelImage, "foo")).saveAsPng("label_image.png")
 
-  // wrong path RealUnsignedByteConverter
+  // wrong internal package path RealUnsignedByteConverter
 }
