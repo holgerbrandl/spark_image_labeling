@@ -33,5 +33,6 @@ libraryDependencies += "net.imglib2" % "imglib2-ij" % "2.0.0-beta6"
 
 // not a compile but a runtime dependency to run ImageJFunctions.show(img)
 libraryDependencies += "net.imglib2" % "imglib2-meta" % "2.0.0-beta-26"
+libraryDependencies += "net.imglib2" % "imglib2-io" % "2.0.0-beta6"
 
 
