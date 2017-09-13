@@ -25,11 +25,11 @@ public class EdgesByCursor {
     List<int[]> nodes = new ArrayList<>();
 
 
-    public EdgesByCursor(Img<IntType> img) {
+    public EdgesByCursor(Img img) {
 
 //        https://imagej.net/ImgLib2_-_Accessors#A_RealRandomAccess_to_Render_Mandelbrot_Fractals
         Cursor locCursor = img.localizingCursor();
-        final RandomAccess<IntType> r = img.randomAccess();
+        final RandomAccess r = img.randomAccess();
 
         int[] pos = new int[locCursor.numDimensions()];
         int[] centerPos = new int[locCursor.numDimensions()];

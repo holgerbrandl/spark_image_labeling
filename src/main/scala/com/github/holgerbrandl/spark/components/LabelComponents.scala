@@ -1,6 +1,6 @@
 package com.github.holgerbrandl.spark.components
 
-import com.github.holgerbrandl.spark.components.HashUtils.getLongHash
+import com.github.holgerbrandl.spark.components.Utils.getLongHash
 import net.imglib2.RandomAccess
 import net.imglib2.`type`.numeric.integer.{IntType, UnsignedByteType}
 import net.imglib2.img.Img
@@ -28,8 +28,8 @@ object Tester extends App {
   new LabelComponents(img)
 
   // see http://imagej.net/ImgLib2_Examples
-  //ImageJFunctions.show(labelImage)
-  ImageJFunctions.wrapUnsignedByte(img, "original").show()
+  ImageJFunctions.show(img)
+  //  ImageJFunctions.wrapUnsignedByte(img, "original").show()
   //  ImageJFunctions.wrapUnsignedByte(components.labelImage, "label_image").show()
 
 }
@@ -37,15 +37,14 @@ object Tester extends App {
 /**
   * @author Holger Brandl
   */
-class LabelComponents(val img: Img[IntType]) {
+//noinspection TypeAnnotation
+class LabelComponents(val img: Img[_ <: Any], val spark: SparkSession = Utils.localSpark()) {
 
   //  Logger.getLogger("org").setLevel(Level.OFF)
 
-  val spark = SparkSession.builder()
-    .appName("Spark SQL basic example").master("local[6]")
-    .config("spark.some.config.option", "some-value")
-    .getOrCreate()
+
   // https://spark.apache.org/docs/latest/graphx-programming-guide.html#connected-components
+
 
   val sc = spark.sparkContext
 
@@ -102,11 +101,18 @@ class LabelComponents(val img: Img[IntType]) {
   // wrong internal package path RealUnsignedByteConverter
 }
 
-object HashUtils {
+object Utils {
 
   def getLongHash(x: Array[Int]): Long = {
     // https://stackoverflow.com/questions/744735/java-array-hashcode-implementation
     //    x.hashCode().toLong
     java.util.Arrays.hashCode(x).toLong
+  }
+
+  def localSpark(numThreads: Integer = 1): SparkSession = {
+    SparkSession.builder()
+      .appName("Spark SQL basic example").master(s"local[$numThreads]")
+      .config("spark.some.config.option", "some-value")
+      .getOrCreate()
   }
 }

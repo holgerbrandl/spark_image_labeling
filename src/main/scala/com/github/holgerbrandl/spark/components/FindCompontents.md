@@ -19,6 +19,13 @@ https://spark.apache.org/docs/latest/graphx-programming-guide.html#connected-com
 [Accessors & Cursors](https://imagej.net/ImgLib2_-_Accessors#Cursor)
 
 
+```
+ImagePlusImg image = ImagePlusAdapter.wrap(img);
+Img<UnsignedByteType> image = ImageJFunctions.wrap(img);
+```
+
+try ops http://mvnrepository.com/artifact/net.imagej/imagej-ops/0.38.0
+
 # Benchmarking Notes
 
 Example image after enhance contrasts
