@@ -37,3 +37,13 @@ libraryDependencies += "net.imglib2" % "imglib2-ij" % "2.0.0-beta-38"
 libraryDependencies += "net.imglib2" % "imglib2-io" % "2.0.0-beta-21"
 
 
+// google-add caliper
+
+//libraryDependencies += "com.google.caliper" % "caliper" % "1.0-beta-1"
+libraryDependencies += "org.openjdk.jmh" % "jmh-core" % "1.19"
+libraryDependencies += "org.openjdk.jmh" % "jmh-generator-annprocess" % "1.19"
+
+
+// http://www.scala-sbt.org/0.12.3/docs/Detailed-Topics/Java-Sources.html
+
+compileOrder in Test := CompileOrder.Mixed
