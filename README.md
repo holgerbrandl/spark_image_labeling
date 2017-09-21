@@ -64,24 +64,33 @@ cd /Users/brandl/projects/spark/component_labeling
 ## use sbt plugin from https://github.com/ktoso/sbt-jmh
 # Write your benchmarks in `src/main/scala`. They will be picked up and instrumented by the plugin.
 
+## run all
 sbt jmh:run * ## works if no "extends app" are present in cde
+#sbt jmh:run -i 3 -wi 3 -f1 -t1 .*FalseSharing.*
 
-# run an individual class
-sbt jmh:run com.github.holgerbrandl.spark.components.ThreadedLabelBM -rf json -rff results.csv
+# run local benchmarking
+sbt jmh:run -rf json -rff threaded_results.csv com.github.holgerbrandl.spark.components.ThreadedLabelBM 
 
-# or followin params from sbt-jmh docs
-sbt jmh:run -i 3 -wi 3 -f1 -t1 .*FalseSharing.*
+## run truly distributed labeling 
+export SPARK_CLUSTER_URL
+sbt jmh:run -rf json -rff cluster_results.csv com.github.holgerbrandl.spark.components.ClusterLabelBenchmark 
+
 ```
 
-# Future iteration
+
+# Next Steps
+
+1. fix imglib generics by converting Interval back into byte/int image2
+
+3. Simplify deployment
 
 rebuild using gradle, see https://docs.gradle.org/current/userguide/scala_plugin.html and do profiling with https://github.com/melix/jmh-gradle-plugin which also supports better combined fatjar packaging and thus allow for `java -jar build/libs/benchmarking-experiments-0.1.0-all.jar` which seems to accept args because of https://github.com/danielmitterdorfer/benchmarking-experiments/blob/master/pom.xml#L65
 
 
 ![](.FindCompontents_images/97611800.png)
-from  http://daniel.mitterdorfer.name/img/jmh-workflow.png which also uses `gradle shadow` --> sources: https://github.com/danielmitterdorfer/benchmarking-experiments without using jmh-gradle!!
+[Source](http://daniel.mitterdorfer.name/img/jmh-workflow.png ) which also uses `gradle shadow` --> sources: https://github.com/danielmitterdorfer/benchmarking-experiments without using jmh-gradle!!
 
-or use mvn archetype
+or use mvn archetype as described on http://openjdk.java.net/projects/code-tools/jmh/
 
 ```
 ## jar building: follow advice from http://openjdk.java.net/projects/code-tools/jmh/
@@ -96,9 +105,7 @@ mvn archetype:generate \
 ```
 
 
-# Next steps
 
-* fix imglib generics by converting Interval back into byte/int image
 
 
 
