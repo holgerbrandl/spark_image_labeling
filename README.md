@@ -1,15 +1,10 @@
+# Image Component Labeling Using Apache Spark
 
-
-Array DBs
-* http://www.alphadevx.com/a/36-Comparison-of-Relational-and-Multi-Dimensional-Database-Structures
-* https://en.wikipedia.org/wiki/Array_DBMS
+Idea: rephrase problem into graph and use graphx connected component search to label components in a distributed (sparky) manner.
 
 # Spark Graph API pointers
 
-
 https://spark.apache.org/docs/latest/graphx-programming-guide.html#connected-components
-
-
 
 
 # ImgLib2 API pointers
@@ -28,7 +23,6 @@ try ops http://mvnrepository.com/artifact/net.imagej/imagej-ops/0.38.0
 
 Example image after enhance contrasts
 ![](.FindCompontents_images/1332418f.png)
-
 
 
 # Benchmarking
@@ -104,9 +98,8 @@ mvn archetype:generate \
           -Dversion=1.0
 ```
 
+## Other References
 
-
-
-
-
-
+Array DBs
+* http://www.alphadevx.com/a/36-Comparison-of-Relational-and-Multi-Dimensional-Database-Structures
+* https://en.wikipedia.org/wiki/Array_DBMS
