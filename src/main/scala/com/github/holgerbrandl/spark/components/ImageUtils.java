@@ -8,7 +8,6 @@ import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImgFactory;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
@@ -34,7 +33,8 @@ public class ImageUtils {
         // more modern imglib2 API
         long[] longDims = new long[]{dims[0], dims[1], dims[2]}; // how to do n-dim here?
         Img<UnsignedByteType> image = noiseImage(new UnsignedByteType(), longDims, new Random(1));
-        ImageJFunctions.show(image, "noise");
+
+//        ImageJFunctions.show(image, "noise");
 
 
         // perform gaussian convolution with float precision (see http://imagej.net/ImgLib2_Examples)
@@ -43,6 +43,13 @@ public class ImageUtils {
         // first extend the image to infinity, zeropad
         RandomAccessible<UnsignedByteType> infiniteImg = Views.extendValue(image, new UnsignedByteType());
 
+        int sigma;
+
+        if (dims.length == 2) {
+            sigma = 8;
+        } else {
+            sigma = 3;
+        }
 
         try {
             Gauss3.gauss(3, infiniteImg, image);
@@ -50,7 +57,7 @@ public class ImageUtils {
             throw new RuntimeException(e);
         }
 
-        ImageJFunctions.show(image, "nach_gauss");
+//        ImageJFunctions.show(image, "nach_gauss");
 
 
         // threshold see https://github.com/StephanPreibisch/imglib2-introduction/blob/master/src/main/java/net/imglib2/introduction/ImgLib2_Threshold6.java

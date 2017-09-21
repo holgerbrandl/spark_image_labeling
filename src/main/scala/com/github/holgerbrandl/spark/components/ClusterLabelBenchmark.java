@@ -3,6 +3,7 @@ package com.github.holgerbrandl.spark.components;
 import net.imglib2.img.Img;
 import net.imglib2.type.logic.BitType;
 import org.apache.log4j.Logger;
+import org.apache.spark.sql.SparkSession;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
@@ -51,7 +52,14 @@ public class ClusterLabelBenchmark {
 
     @Benchmark
     @Fork(1)
-    public void labelCompoments(ExecutionPlan plan) {
-        new LabelComponents(plan.testImage, Utils.localSpark(plan.numThreads)).labelImage();
+    public void labelComponents(ExecutionPlan plan) {
+        String clusterURL = System.getenv("SPARK_CLUSTER");
+        SparkSession spark = SparkSession.builder()
+                .appName("Spark SQL basic example")
+                .master(clusterURL)
+                .config("spark.some.config.option", "some-value")
+                .getOrCreate();
+
+        new LabelComponents(plan.testImage, spark).labelImage();
     }
 }

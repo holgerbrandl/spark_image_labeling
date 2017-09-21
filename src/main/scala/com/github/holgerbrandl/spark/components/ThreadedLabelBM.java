@@ -26,8 +26,8 @@ public class ThreadedLabelBM {
     public static class ExecutionPlan {
 
         //        @Param({"127", "128", "129", "130", "131"})
-//        @Param({"127", "129", "131"})
-        @Param({"131"})
+        //        @Param({"131"})
+        @Param({"127", "129", "131"})
         int threshold;
 
         @Param({"1", "3", "6"})
@@ -41,16 +41,15 @@ public class ThreadedLabelBM {
 
         @Setup(Level.Trial)
         public void setUp() {
-//            testImage = makeTestImage(new int[]{250, 250, 1}, threshold);
-//            testImage = makeTestImage(new int[]{500, 500, 1}, threshold);
-            testImage = makeTestImage(new int[]{1000, 1000, 1}, threshold);
+            int size = 1000;
+            testImage = makeTestImage(new int[]{size, size, 1}, threshold);
         }
     }
 
 
     @Benchmark
     @Fork(1)
-    public void labelCompoments(ExecutionPlan plan) {
+    public void labelComponents(ExecutionPlan plan) {
         new LabelComponents(plan.testImage, Utils.localSpark(plan.numThreads)).labelImage();
     }
 }
