@@ -2,6 +2,7 @@ package com.github.holgerbrandl.spark.components;
 
 import net.imglib2.img.Img;
 import net.imglib2.type.logic.BitType;
+import org.apache.log4j.Logger;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
@@ -15,6 +16,10 @@ import static com.github.holgerbrandl.spark.components.LabelTester.makeTestImage
 @Warmup(iterations = 3)
 @Measurement(iterations = 5)
 public class LocalSparkComponentsBM {
+
+    static {
+        Logger.getLogger("org").setLevel(org.apache.log4j.Level.OFF);
+    }
 
 
     @State(Scope.Benchmark)
@@ -36,7 +41,9 @@ public class LocalSparkComponentsBM {
 
         @Setup(Level.Trial)
         public void setUp() {
-            testImage = makeTestImage(new int[]{2000, 2000, 1}, threshold);
+//            testImage = makeTestImage(new int[]{250, 250, 1}, threshold);
+//            testImage = makeTestImage(new int[]{500, 500, 1}, threshold);
+            testImage = makeTestImage(new int[]{1000, 1000, 1}, threshold);
         }
     }
 

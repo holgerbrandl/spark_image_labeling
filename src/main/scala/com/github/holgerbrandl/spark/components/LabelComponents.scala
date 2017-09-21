@@ -2,37 +2,16 @@ package com.github.holgerbrandl.spark.components
 
 import com.github.holgerbrandl.spark.components.Utils.getLongHash
 import net.imglib2.RandomAccess
-import net.imglib2.`type`.numeric.integer.{IntType, UnsignedByteType}
+import net.imglib2.`type`.numeric.integer.UnsignedByteType
 import net.imglib2.img.Img
-import net.imglib2.img.array.{ArrayImg, ArrayImgFactory, ArrayImgs}
-import net.imglib2.img.basictypeaccess.array.IntArray
-import net.imglib2.img.display.imagej.ImageJFunctions
+import net.imglib2.img.array.ArrayImgFactory
 import org.apache.spark.graphx.{Edge, Graph}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
 import scala.collection.JavaConversions
 
-object Tester extends App {
 
-  val img: ArrayImg[IntType, IntArray] = ArrayImgs.ints(Array[Int](
-    0, 0, 0, 0, 0,
-    0, 1, 0, 0, 1,
-    0, 1, 0, 2, 3,
-    0, 0, 0, 4, 0,
-    0, 0, 0, 0, 0
-  ), 5, 5)
-
-
-  //  private val components = new LabelComponents(img)
-  new LabelComponents(img)
-
-  // see http://imagej.net/ImgLib2_Examples
-  ImageJFunctions.show(img)
-  //  ImageJFunctions.wrapUnsignedByte(img, "original").show()
-  //  ImageJFunctions.wrapUnsignedByte(components.labelImage, "label_image").show()
-
-}
 
 /**
   * @author Holger Brandl
@@ -40,7 +19,6 @@ object Tester extends App {
 //noinspection TypeAnnotation
 class LabelComponents(val img: Img[_ <: Any], val spark: SparkSession = Utils.localSpark()) {
 
-  //  Logger.getLogger("org").setLevel(Level.OFF)
 
 
   // https://spark.apache.org/docs/latest/graphx-programming-guide.html#connected-components
@@ -90,15 +68,6 @@ class LabelComponents(val img: Img[_ <: Any], val spark: SparkSession = Utils.lo
       randAcc.setPosition(coord)
       randAcc.get.setInteger(color)
     }
-
-
-  //  private val value: Any = ImagePlusAdapter.wrap(img)
-  //  ImagePlusAdapter.wrap(imp)
-  //  new FileSaver().saveAsPng("test_image.png")
-  //  new FileSaver(ImageJFunctions.wrapUnsignedByte(img, "bar")).saveAsPng("test_image.png")
-  //  new FileSaver(ImageJFunctions.wrapUnsignedByte(labelImage, "foo")).saveAsPng("label_image.png")
-  //  RealUnsignedByteConverter
-  // wrong internal package path RealUnsignedByteConverter
 }
 
 object Utils {

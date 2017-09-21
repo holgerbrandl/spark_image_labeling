@@ -47,3 +47,6 @@ libraryDependencies += "org.openjdk.jmh" % "jmh-generator-annprocess" % "1.19"
 // http://www.scala-sbt.org/0.12.3/docs/Detailed-Topics/Java-Sources.html
 
 compileOrder in Test := CompileOrder.Mixed
+
+
+enablePlugins(JmhPlugin)
