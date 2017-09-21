@@ -1,6 +1,8 @@
 package com.github.holgerbrandl.spark.components;
 
+import ij.io.FileSaver;
 import net.imglib2.img.Img;
+import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.logic.BitType;
 import org.apache.log4j.Logger;
 import org.openjdk.jmh.annotations.*;
@@ -43,6 +45,10 @@ public class ThreadedLabelBM {
         public void setUp() {
             int size = 1000;
             testImage = makeTestImage(new int[]{size, size, 1}, threshold);
+
+            // todo also save images here as a reference
+            String imageFile = "thres" + threshold + "_threads" + numThreads + "_" + System.currentTimeMillis() + ".png";
+            new FileSaver(ImageJFunctions.wrapBit(testImage, "")).saveAsPng(imageFile);
         }
     }
 

@@ -26,27 +26,28 @@ Img<UnsignedByteType> image = ImageJFunctions.wrap(img);
 
 try ops http://mvnrepository.com/artifact/net.imagej/imagej-ops/0.38.0
 
-# Benchmarking Notes
-
 Example image after enhance contrasts
 ![](.FindCompontents_images/1332418f.png)
 
 
-Libs
+
+# Benchmarking
+
+Available Libs
 * https://scalameter.github.io/
-* jmh http://www.baeldung.com/java-microbenchmark-harness
+* jmh http://www.baeldung.com/java-microbenchmark-harness --> Seems better
 
 
-@State Model
+`@State` Model
 > When multiple {@link Param}-s are needed for the benchmark run,
  JMH will compute the outer product of all the parameters in the run.
 
- run with json as outformat
- ```
- com.github.holgerbrandl.spark.misc.ExampleBenchmark.init  -rf json -rff results.csv
- ```
+run with json as outformat
+```
+com.github.holgerbrandl.spark.misc.ExampleBenchmark.init  -rf json -rff results.csv
+```
 
- csv provided error is 99.9 CI
+csv provided error is 99.9 CI
 
 if execution plan is injected into benchmark method --> traverse state outer product
 
@@ -60,14 +61,13 @@ cd /Users/brandl/projects/spark/component_labeling
 #java -jar "target/scala-2.11/component_labeling_2.11-0.1.jar"
 # -> won't work without a fat jar
 
-## use sbt plugin
-https://github.com/ktoso/sbt-jmh
+## use sbt plugin from https://github.com/ktoso/sbt-jmh
 # Write your benchmarks in `src/main/scala`. They will be picked up and instrumented by the plugin.
 
 sbt jmh:run * ## works if no "extends app" are present in cde
 
 # run an individual class
-sbt jmh:run com.github.holgerbrandl.spark.components.LocalSparkComponentsBM
+sbt jmh:run com.github.holgerbrandl.spark.components.ThreadedLabelBM -rf json -rff results.csv
 
 # or followin params from sbt-jmh docs
 sbt jmh:run -i 3 -wi 3 -f1 -t1 .*FalseSharing.*
