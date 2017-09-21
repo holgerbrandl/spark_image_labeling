@@ -7,7 +7,7 @@ import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.holgerbrandl.spark.components.LabelTester.makeTestImage;
+import static com.github.holgerbrandl.spark.components.ImageUtils.makeTestImage;
 
 
 @BenchmarkMode(Mode.AverageTime)
@@ -15,7 +15,7 @@ import static com.github.holgerbrandl.spark.components.LabelTester.makeTestImage
 //@State(Scope.Thread)
 @Warmup(iterations = 3)
 @Measurement(iterations = 5)
-public class LocalSparkComponentsBM {
+public class ThreadedLabelBM {
 
     static {
         Logger.getLogger("org").setLevel(org.apache.log4j.Level.OFF);
@@ -50,7 +50,7 @@ public class LocalSparkComponentsBM {
 
     @Benchmark
     @Fork(1)
-    public void blankMethod(ExecutionPlan plan) {
+    public void labelCompoments(ExecutionPlan plan) {
         new LabelComponents(plan.testImage, Utils.localSpark(plan.numThreads)).labelImage();
     }
 }

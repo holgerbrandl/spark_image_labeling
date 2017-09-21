@@ -2,9 +2,10 @@ package com.github.holgerbrandl.spark.components
 
 import com.github.holgerbrandl.spark.components.Utils.getLongHash
 import net.imglib2.RandomAccess
-import net.imglib2.`type`.numeric.integer.UnsignedByteType
+import net.imglib2.`type`.numeric.integer.{IntType, UnsignedByteType}
 import net.imglib2.img.Img
-import net.imglib2.img.array.ArrayImgFactory
+import net.imglib2.img.array.{ArrayImg, ArrayImgFactory, ArrayImgs}
+import net.imglib2.img.basictypeaccess.array.IntArray
 import org.apache.spark.graphx.{Edge, Graph}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
@@ -12,13 +13,11 @@ import org.apache.spark.sql.SparkSession
 import scala.collection.JavaConversions
 
 
-
 /**
   * @author Holger Brandl
   */
 //noinspection TypeAnnotation
 class LabelComponents(val img: Img[_ <: Any], val spark: SparkSession = Utils.localSpark()) {
-
 
 
   // https://spark.apache.org/docs/latest/graphx-programming-guide.html#connected-components
@@ -84,4 +83,17 @@ object Utils {
       .config("spark.some.config.option", "some-value")
       .getOrCreate()
   }
+}
+
+object LCTester2 { // required for sbt plugin to compile properly
+
+  val img: ArrayImg[IntType, IntArray] = ArrayImgs.ints(Array[Int](
+    0, 0, 0, 0, 0,
+    0, 1, 0, 0, 1,
+    0, 1, 0, 2, 3,
+    0, 0, 0, 4, 0,
+    0, 0, 0, 0, 0
+  ), 5, 5)
+
+  new LabelComponents(img)
 }
