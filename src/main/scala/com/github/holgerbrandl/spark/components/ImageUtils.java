@@ -14,6 +14,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.view.Views;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -31,7 +32,7 @@ public class ImageUtils {
 //        Img<UnsignedByteType> image = ImageJFunctions.wrap(img);
 
         // more modern imglib2 API
-        long[] longDims = new long[]{dims[0], dims[1], dims[2]}; // how to do n-dim here?
+        long[] longDims = Arrays.stream(dims).asLongStream().toArray();
         Img<UnsignedByteType> image = noiseImage(new UnsignedByteType(), longDims, new Random(1));
 
 //        ImageJFunctions.show(image, "noise");
@@ -52,7 +53,7 @@ public class ImageUtils {
         }
 
         try {
-            Gauss3.gauss(3, infiniteImg, image);
+            Gauss3.gauss(sigma, infiniteImg, image);
         } catch (IncompatibleTypeException e) {
             throw new RuntimeException(e);
         }

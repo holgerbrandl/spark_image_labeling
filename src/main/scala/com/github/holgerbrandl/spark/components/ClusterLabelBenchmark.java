@@ -45,7 +45,11 @@ public class ClusterLabelBenchmark {
 
         @Setup(Level.Trial)
         public void setUp() {
-            testImage = makeTestImage(new int[]{imageSize, imageSize, 1}, threshold);
+            // 2-d images
+            testImage = makeTestImage(new int[]{imageSize, imageSize}, threshold);
+
+//            int numSlices = 200;
+//            testImage = makeTestImage(new int[]{imageSize, imageSize, numSlices}, threshold);
         }
     }
 
@@ -54,10 +58,13 @@ public class ClusterLabelBenchmark {
     @Fork(1)
     public void labelComponents(ExecutionPlan plan) {
         String clusterURL = System.getenv("SPARK_CLUSTER");
+
         SparkSession spark = SparkSession.builder()
                 .appName("Spark SQL basic example")
                 .master(clusterURL)
                 .config("spark.some.config.option", "some-value")
+                .config("spark.executor.memory", "2g")
+                .config("spark.cores.max", "10")
                 .getOrCreate();
 
         new LabelComponents(plan.testImage, spark).labelImage();

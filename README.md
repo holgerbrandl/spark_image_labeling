@@ -59,17 +59,22 @@ cd /Users/brandl/projects/spark/component_labeling
 # Write your benchmarks in `src/main/scala`. They will be picked up and instrumented by the plugin.
 
 ## run all
-sbt jmh:run * ## works if no "extends app" are present in cde
+sbt 'jmh:run *' ## works if no "extends app" are present in code (see https://github.com/ktoso/sbt-jmh/pull/117#issuecomment-331255198)
 #sbt jmh:run -i 3 -wi 3 -f1 -t1 .*FalseSharing.*
 
+# run test benchmark
+sbt 'jmh:run -rf json -rff ExampleBenchmark.results.json com.github.holgerbrandl.spark.misc.ExampleBenchmark'
+
 # run local benchmarking
-sbt jmh:run -rf json -rff threaded_results.csv com.github.holgerbrandl.spark.components.ThreadedLabelBM 
+sbt 'jmh:run -rf json -rff threaded_results.json com.github.holgerbrandl.spark.components.ThreadedLabelBM' 
 
 ## run truly distributed labeling 
-export SPARK_CLUSTER_URL
-sbt jmh:run -rf json -rff cluster_results.csv com.github.holgerbrandl.spark.components.ClusterLabelBenchmark 
+## fur; sparkcluster start  --walltime 05:00 --memory-per-core 2000 100
+export SPARK_CLUSTER_URL=
+sbt 'jmh:run -rf json -rff cluster_results.csv com.github.holgerbrandl.spark.components.ClusterLabelBenchmark' 
 
 ```
+
 
 
 # Next Steps
@@ -103,3 +108,4 @@ mvn archetype:generate \
 Array DBs
 * http://www.alphadevx.com/a/36-Comparison-of-Relational-and-Multi-Dimensional-Database-Structures
 * https://en.wikipedia.org/wiki/Array_DBMS
+* http://zachmoshe.com/2015/11/11/random-polygons.html

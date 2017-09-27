@@ -20,7 +20,9 @@ public class LabelTester {
     public static void main(String[] args) throws IncompatibleTypeException {
         new ImageJ();
 
+        // build a 3d image
         Img<BitType> image = ImageUtils.makeTestImage(new int[]{500, 500, 50}, 130);
+
 //        ImagePlus testImage = ImageJFunctions.wrapUnsignedByte(image, "original");
 //        testImage.show();
         ImageJFunctions.show(image, "test");
@@ -29,7 +31,7 @@ public class LabelTester {
 
     public static void main2(String[] args) throws IncompatibleTypeException {
 //
-        Img image = ImageUtils.makeTestImage(new int[]{2000, 2000, 1}, 130);
+        Img image = ImageUtils.makeTestImage(new int[]{2000, 2000}, 130);
 
 //        ImageJFunctions.show(makeTestImage(new int[]{2000, 2000, 1}, 123), "123"); // almost black
 //        ImageJFunctions.show(makeTestImage(new int[]{2000, 2000, 1}, 125), "125");

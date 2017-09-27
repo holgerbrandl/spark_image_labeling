@@ -32,7 +32,7 @@ public class ThreadedLabelBM {
         @Param({"127", "129", "131"})
         int threshold;
 
-        @Param({"1", "3", "6"})
+        @Param({"1", "3", "5", "7"})
         Integer numThreads;
 
 
@@ -44,10 +44,10 @@ public class ThreadedLabelBM {
         @Setup(Level.Trial)
         public void setUp() {
             int size = 1000;
-            testImage = makeTestImage(new int[]{size, size, 1}, threshold);
 
-            // todo also save images here as a reference
-            String imageFile = "thres" + threshold + "_threads" + numThreads + "_" + System.currentTimeMillis() + ".png";
+            testImage = makeTestImage(new int[]{size, size}, threshold);
+
+            String imageFile = "test_images/thres" + threshold + "_threads" + numThreads + "_" + System.currentTimeMillis() + ".png";
             new FileSaver(ImageJFunctions.wrapBit(testImage, "")).saveAsPng(imageFile);
         }
     }
