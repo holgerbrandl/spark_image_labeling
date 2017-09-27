@@ -31,14 +31,17 @@ public class ClusterLabelBenchmark {
         @Param({"131"})
         int threshold;
 
-        @Param({"1", "3", "6"})
-        Integer numThreads;
+        //        @Param({"1", "5", "10", "15", "20"})
+        @Param("5")
+        Integer numCores;
 
-        @Param({"500", "1000", "2000"})
+        //        @Param({"500", "1000", "2000"})
+        @Param({"1000"})
         Integer imageSize;
 
 
         Img<BitType> testImage;
+        SparkSession spark;
 
         // see https://stackoverflow.com/questions/26168254/how-to-set-amount-of-spark-executors
 
@@ -46,6 +49,19 @@ public class ClusterLabelBenchmark {
         @Setup(Level.Trial)
         public void setUp() {
             // 2-d images
+
+            String clusterURL = System.getenv("SPARK_CLUSTER_URL");
+
+            spark = SparkSession.builder()
+                    .appName("Component_Labeling")
+                    .master(clusterURL)
+                    // default 1g see https://spark.apache.org/docs/latest/configuration.html
+//                    .config("spark.executor.memory", "2g")
+                    // the maximum amount of CPU cores to request for the application from across the cluster,
+                    // see https://spark.apache.org/docs/latest/configuration.html
+                    .config("spark.cores.max", "" + numCores)
+                    .getOrCreate();
+
             testImage = makeTestImage(new int[]{imageSize, imageSize}, threshold);
 
 //            int numSlices = 200;
@@ -57,16 +73,6 @@ public class ClusterLabelBenchmark {
     @Benchmark
     @Fork(1)
     public void labelComponents(ExecutionPlan plan) {
-        String clusterURL = System.getenv("SPARK_CLUSTER");
-
-        SparkSession spark = SparkSession.builder()
-                .appName("Spark SQL basic example")
-                .master(clusterURL)
-                .config("spark.some.config.option", "some-value")
-                .config("spark.executor.memory", "2g")
-                .config("spark.cores.max", "10")
-                .getOrCreate();
-
-        new LabelComponents(plan.testImage, spark).labelImage();
+        new LabelComponents(plan.testImage, plan.spark).labelImage();
     }
 }

@@ -70,11 +70,13 @@ sbt 'jmh:run -rf json -rff threaded_results.json com.github.holgerbrandl.spark.c
 
 ## run truly distributed labeling 
 ## fur; sparkcluster start  --walltime 05:00 --memory-per-core 2000 100
-export SPARK_CLUSTER_URL=
-sbt 'jmh:run -rf json -rff cluster_results.csv com.github.holgerbrandl.spark.components.ClusterLabelBenchmark' 
+export SPARK_CLUSTER_URL="spark://localhost:10100"
+# test spark cluster connectivity
+$SPARK_HOME/bin/spark-shell --master ${SPARK_CLUSTER_URL} 
+
+sbt 'jmh:run -rf json -rff cluster_results.json com.github.holgerbrandl.spark.components.ClusterLabelBenchmark' 
 
 ```
-
 
 
 # Next Steps
