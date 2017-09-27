@@ -48,5 +48,7 @@ libraryDependencies += "org.openjdk.jmh" % "jmh-generator-annprocess" % "1.19"
 
 compileOrder in Test := CompileOrder.Mixed
 
+// https://stackoverflow.com/questions/9518772/is-there-an-easy-way-to-copy-all-jar-dependencies-to-a-certain-directory-in-xsbt
+//retrieveManaged := true
 
 enablePlugins(JmhPlugin)

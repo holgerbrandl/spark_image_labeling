@@ -68,14 +68,28 @@ sbt 'jmh:run -rf json -rff ExampleBenchmark.results.json com.github.holgerbrandl
 # run local benchmarking
 sbt 'jmh:run -rf json -rff threaded_results.json com.github.holgerbrandl.spark.components.ThreadedLabelBM' 
 
-## run truly distributed labeling 
-## fur; sparkcluster start  --walltime 05:00 --memory-per-core 2000 100
-export SPARK_CLUSTER_URL="spark://localhost:10100"
+
+
+## Benchmark distributed labeling 
+
+## fur; cd /home/brandl/misc/spark_image_labeling; sparkcluster start  --walltime 05:00 --memory-per-core 2000 100
+
+# dedicated local cluster 
+export SPARK_CLUSTER_URL="spark://scicomp-mac-12-usb.mpi-cbg.de:7077"
+
+#ssh forwarded remote cluster
+# export SPARK_CLUSTER_URL="spark://localhost:10100"
+
+## actual cluster url when running benchmark on the cluster itself
+export SPARK_CLUSTER_URL="spark://c03n01:7077"
+
 # test spark cluster connectivity
 $SPARK_HOME/bin/spark-shell --master ${SPARK_CLUSTER_URL} 
 
+sbt package #don't forget of you'll see proxy-cast exception
 sbt 'jmh:run -rf json -rff cluster_results.json com.github.holgerbrandl.spark.components.ClusterLabelBenchmark' 
 
+# print spark logs
 ```
 
 

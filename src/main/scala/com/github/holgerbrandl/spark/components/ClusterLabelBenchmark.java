@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.apache.spark.sql.SparkSession;
 import org.openjdk.jmh.annotations.*;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.holgerbrandl.spark.components.ImageUtils.makeTestImage;
@@ -52,9 +53,18 @@ public class ClusterLabelBenchmark {
 
             String clusterURL = System.getenv("SPARK_CLUSTER_URL");
 
+            if (clusterURL.isEmpty())
+                throw new RuntimeException("Can not connect to spark: SPARK_CLUSTER_URL is not defined.");
+
+            String applJar = "target/scala-2.11/component_labeling_2.11-0.1.jar";
+            if (!new File(applJar).exists())
+                throw new RuntimeException("application jar does not exist. run 'sbt package' first!");
+
             spark = SparkSession.builder()
                     .appName("Component_Labeling")
                     .master(clusterURL)
+                    // https://stackoverflow.com/questions/41722993/spark-2-0-set-jars
+                    .config("spark.jars", applJar)
                     // default 1g see https://spark.apache.org/docs/latest/configuration.html
 //                    .config("spark.executor.memory", "2g")
                     // the maximum amount of CPU cores to request for the application from across the cluster,
